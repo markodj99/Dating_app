@@ -6,13 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [Route("api/users")]
-    [ApiController]
-    public class UsersController(AppDbContext _context) : Controller
+    public class UserController(AppDbContext _context) : BaseAPIController
     {
         [AllowAnonymous]
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
             return Ok(await _context.Users.ToListAsync());
         }
