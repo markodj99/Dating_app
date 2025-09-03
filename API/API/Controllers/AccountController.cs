@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.DTO;
+using API.Interface;
 using API.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +9,10 @@ using System.Text;
 
 namespace API.Controllers
 {
-    public class AccountController(AppDbContext _context) : BaseAPIController
+    public class AccountController(AppDbContext _context, ITokenService _tokenService) : BaseAPIController
     {
         [HttpPost("register")]
-        public async Task<ActionResult<RegisterDto>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
             if (await UsernameExists(registerDto.Username)) return BadRequest("Username already in use.");
             if (await EmailExists(registerDto.Email)) return BadRequest("Email address already in use.");
@@ -28,7 +29,13 @@ namespace API.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok(registerDto);
+            return Ok(new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Token = _tokenService.CreateJWTToken(user)
+            });
         }
 
 
@@ -42,8 +49,10 @@ namespace API.Controllers
 
             return Ok(new UserDto
             {
+                Id = user.Id,
                 Username = user.Username,
-                Token = "FAKE-TOKEN" // TO DO: Implement JWT token generation
+                Email = user.Email,
+                Token = _tokenService.CreateJWTToken(user)
             });
         }
 
