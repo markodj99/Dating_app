@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
+import { Navbar } from "../layout/navbar/navbar";
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [Navbar],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
