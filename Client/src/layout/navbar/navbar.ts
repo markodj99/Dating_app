@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../core/services/account-service';
 
@@ -10,12 +10,20 @@ import { AccountService } from '../../core/services/account-service';
 })
 export class Navbar {
   protected creds:any = {};
-  private accountService = inject(AccountService);
+  protected accountService = inject(AccountService);
 
-  login() {
+  login(): void {
     this.accountService.login(this.creds).subscribe({
-      next: response => console.log(response),
+      next: response => { 
+        console.log(response);
+        this.creds = {};
+      },
       error: error => alert(error.message)
     });
   }
+
+  logout(): void {
+    this.accountService.logout();
+  }
 }
+
