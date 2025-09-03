@@ -20,7 +20,7 @@ export class App implements OnInit {
   async ngOnInit(): Promise<void> {
     this.users.set(await this.getUsers()); // ako se bojimo da ne uradi unsubscribe
 
-    // this.http.get('https://localhost:5001/api/users/all').subscribe({
+    // this.http.get('https://localhost:5001/api/user/all').subscribe({
     //   next: response => this.users.set(response),
     //   error: error => console.log(error),
     //   complete: () => console.log('Request completed') // opcionalno
@@ -29,7 +29,7 @@ export class App implements OnInit {
 
   async getUsers(): Promise<Object> {
     try {
-      return lastValueFrom(this.http.get('https://localhost:5001/api/users/all'));
+      return lastValueFrom(this.http.get('https://localhost:5001/api/user/all'));
   } catch (error) {
       console.log(error)
       throw error;
