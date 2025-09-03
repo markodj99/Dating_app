@@ -4,6 +4,7 @@ import { lastValueFrom } from 'rxjs';
 import { Navbar } from "../layout/navbar/navbar";
 import { AccountService } from '../core/services/account-service';
 import { Home } from "../features/home/home";
+import { User } from '../types/user';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,7 @@ import { Home } from "../features/home/home";
 export class App implements OnInit {
   protected readonly title: string = 'Dating App';
   
-  protected users = signal<any>([]);
+  protected users = signal<User[]>([]);
 
   // constructor(private http: HttpClient) { } stari nacin za DI
   private http = inject(HttpClient); // novi nacin za DI
@@ -30,9 +31,9 @@ export class App implements OnInit {
     // });
   }
 
-  async getUsers(): Promise<Object> {
+  async getUsers(): Promise<User[]> {
     try {
-      return lastValueFrom(this.http.get('https://localhost:5001/api/user/all'));
+      return lastValueFrom(this.http.get<User[]>('https://localhost:5001/api/user/all'));
   } catch (error) {
       console.log(error)
       throw error;

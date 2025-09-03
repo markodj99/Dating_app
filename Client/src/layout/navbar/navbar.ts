@@ -1,6 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../core/services/account-service';
+import { LoginCreds } from '../../types/user';
 
 @Component({
   selector: 'app-navbar',
@@ -9,14 +10,14 @@ import { AccountService } from '../../core/services/account-service';
   styleUrl: './navbar.css'
 })
 export class Navbar {
-  protected creds:any = {};
+  protected creds: LoginCreds = {} as LoginCreds;
   protected accountService = inject(AccountService);
 
   login(): void {
     this.accountService.login(this.creds).subscribe({
       next: response => { 
         console.log(response);
-        this.creds = {};
+        this.creds = {} as LoginCreds;
       },
       error: error => alert(error.message)
     });
