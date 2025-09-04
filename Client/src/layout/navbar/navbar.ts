@@ -20,7 +20,7 @@ export class Navbar {
 
   login(): void {
     this.accountService.login(this.creds).subscribe({
-      next: response => { 
+      next: () => { 
         this.router.navigateByUrl('/users');
         this.toastService.success('Login successful');
         this.creds = {} as LoginCreds;
