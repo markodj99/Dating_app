@@ -10,6 +10,7 @@ namespace API.Extension
         public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddControllers();
+
             services.AddDbContext<AppDbContext>(
                 options => options.UseSqlServer(config.GetConnectionString("DefaultConnection"))
             );
