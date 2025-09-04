@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../core/services/account-service';
 import { LoginCreds } from '../../types/user';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { ToastService } from '../../core/services/toast-service';
 
 
 @Component({
@@ -15,14 +16,19 @@ export class Navbar {
   protected creds: LoginCreds = {} as LoginCreds;
   protected accountService = inject(AccountService);
   private router = inject(Router);
+  private toastService = inject(ToastService);
 
   login(): void {
     this.accountService.login(this.creds).subscribe({
       next: response => { 
         this.router.navigateByUrl('/users');
+        this.toastService.success('Login successful');
         this.creds = {} as LoginCreds;
       },
-      error: error => alert(error.message)
+      error: (err) => {
+        const msg: string = typeof err.error === 'string' ? err.error : 'Login failed, please try again';
+        this.toastService.error(msg);
+      }
     });
   }
 
