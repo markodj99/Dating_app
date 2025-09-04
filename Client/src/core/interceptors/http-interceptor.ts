@@ -2,11 +2,11 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError } from 'rxjs';
 import { ToastService } from '../services/toast-service';
-//import { Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const toastService = inject(ToastService);
-  //const router = inject(Router);
+  const router = inject(Router);
 
   return next(req).pipe(
     catchError(error => {
@@ -31,10 +31,11 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
             toastService.error("Unauthorized");
             break;
           case 404:
-            toastService.error("Not found");
+            router.navigateByUrl('/not-found');
             break;
           case 500:
-            toastService.error("Internal server error");
+            const navigationExtras = { state: { error: error.error } };
+            router.navigateByUrl('/server-error', navigationExtras);
             break;
           default:
             toastService.error("Something went wrong");
