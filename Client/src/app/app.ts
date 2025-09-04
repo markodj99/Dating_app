@@ -3,18 +3,18 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { Navbar } from "../layout/navbar/navbar";
 import { AccountService } from '../core/services/account-service';
-import { Home } from "../features/home/home";
 import { User } from '../types/user';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [Navbar, Home],
+  imports: [Navbar, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App implements OnInit {
   protected readonly title: string = 'Dating App';
-  
+  protected router = inject(Router);
   protected users = signal<User[]>([]);
 
   // constructor(private http: HttpClient) { } stari nacin za DI
