@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection.Metadata.Ecma335;
 
 namespace API.Model
 {
@@ -18,5 +19,7 @@ namespace API.Model
         //Navigation property to User
         [ForeignKey(nameof(Id))]
         public User User { get; set; } = null!;
+        // Navigation property to Photos
+        public List<Photo> Photos { get; set; } = [];
     }
 }

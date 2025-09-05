@@ -1,5 +1,6 @@
 using API.Extension;
 using API.Middleware;
+using API.Util;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,5 +25,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await SeedDb.SeedUsers(app.Services.CreateScope().ServiceProvider);
 
 app.Run();
