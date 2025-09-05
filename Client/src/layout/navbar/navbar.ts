@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../core/services/account-service';
-import { LoginCreds } from '../../types/user';
+import { LoginCreds } from '../../types/loginCreds';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ToastService } from '../../core/services/toast-service';
 
@@ -21,7 +21,7 @@ export class Navbar {
   login(): void {
     this.accountService.login(this.creds).subscribe({
       next: () => { 
-        this.router.navigateByUrl('/users');
+        this.router.navigateByUrl('/members');
         this.toastService.success('Login successful');
         this.creds = {} as LoginCreds;
       },
