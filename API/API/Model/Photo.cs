@@ -7,6 +7,7 @@
         public string? PublicId { get; set; }
 
         // Navigation property to Member
+        //[JsonIgnore]
         public Member Member { get; set; } = null!;
         public string MemberId { get; set; } = null!;
     }

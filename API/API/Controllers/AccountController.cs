@@ -3,6 +3,7 @@ using API.DTO;
 using API.Extension;
 using API.Interface;
 using API.Model;
+using API.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -30,7 +31,7 @@ namespace API.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok(user.UserToUserDto(_tokenService));
+            return Ok(ToDto.UserToUserDto(user, _tokenService.CreateJWTToken(user)));
         }
 
 
@@ -42,7 +43,7 @@ namespace API.Controllers
 
             if (!PasswordsMatch(loginDto.Password, user.PasswordHash, user.PasswordSalt)) return Unauthorized("Invalid password.");
 
-            return Ok(user.UserToUserDto(_tokenService));
+            return Ok(ToDto.UserToUserDto(user, _tokenService.CreateJWTToken(user)));
         }
 
         private async Task<bool> UsernameExists(string username)
