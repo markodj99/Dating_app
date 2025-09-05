@@ -1,5 +1,7 @@
 ﻿using API.Data;
 using API.Interface;
+using API.Repository;
+using API.Repository.IRepository;
 using API.Service;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +21,7 @@ namespace API.Extension
 
             services.AddCors();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IMemberRepository, MemberRepository>();
 
             return services;
         }
