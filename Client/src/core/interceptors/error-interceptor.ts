@@ -4,7 +4,7 @@ import { catchError } from 'rxjs';
 import { ToastService } from '../services/toast-service';
 import { Router } from '@angular/router';
 
-export const httpInterceptor: HttpInterceptorFn = (req, next) => {
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toastService = inject(ToastService);
   const router = inject(Router);
 
