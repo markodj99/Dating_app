@@ -12,6 +12,11 @@ namespace API.Repository
             return await _context.Members.FindAsync(id);
         }
 
+        public async Task<Member?> GetMemberByIdWithUserAsync(string id)
+        {
+            return await _context.Members.Include(x  => x.User).FirstOrDefaultAsync(x => x.Id.Equals(id));
+        }
+
         public async Task<IReadOnlyList<Member>> GetMembersAsync()
         {
             return await _context.Members.ToListAsync();

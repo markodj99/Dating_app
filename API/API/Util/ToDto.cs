@@ -72,5 +72,15 @@ namespace API.Util
                 ImageUrl = user.ImageUrl,
             };
         }
+
+        public static void MemberUpdateDtoToMember(Member oldMember, MemberUpdateDto updatedMember)
+        {
+            oldMember.Username = updatedMember.Username ?? oldMember.Username;
+            oldMember.Description = updatedMember.Description ?? oldMember.Description;
+            oldMember.City = updatedMember.City ?? oldMember.City;
+            oldMember.Country = updatedMember.Country ?? oldMember.Country;
+
+            oldMember.User.Username = updatedMember.Username ?? oldMember.Username;
+        }
     }
 }
