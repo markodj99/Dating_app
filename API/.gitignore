@@ -485,4 +485,4 @@ $RECYCLE.BIN/
 *.swp
 
 ./API/obj
-./API/settings.json
+./API/appsettings.json
