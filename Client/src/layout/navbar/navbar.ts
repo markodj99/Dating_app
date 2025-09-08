@@ -5,6 +5,7 @@ import { LoginCreds } from '../../types/loginCreds';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ToastService } from '../../core/services/toast-service';
 import { themes } from '../theme';
+import { BusyService } from '../../core/services/busy-service';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class Navbar implements OnInit{
   private toastService = inject(ToastService);
   protected selectedTheme = signal<string>(localStorage.getItem('theme') || 'dark');
   protected themes = themes;
+  protected busyService = inject(BusyService);
 
   ngOnInit(): void {
     document.documentElement.setAttribute('data-theme', this.selectedTheme());
