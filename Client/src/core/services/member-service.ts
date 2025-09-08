@@ -3,6 +3,8 @@ import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Member } from '../../types/member';
 import { Photo } from '../../types/photo';
+import { EditableMember } from '../../types/editableMember';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,16 +13,22 @@ export class MemberService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
   public editMode = signal(false);
+  member = signal<Member | null>(null);
+
 
   getMembers() {
     return this.http.get<Member[]>(this.baseUrl + 'member/all');
   }
 
   getMember(id: string) {
-    return this.http.get<Member>(this.baseUrl + 'member/' + id);
+    return this.http.get<Member>(this.baseUrl + 'member/' + id).pipe(tap(member => this.member.set(member)));
   }
 
   getMemberPhotos(id: string) {
     return this.http.get<Photo[]>(this.baseUrl + 'member/' + id + '/photos');
+  }
+
+  updateMember(member: EditableMember) {
+    return this.http.put(this.baseUrl + 'member/update', member);
   }
 }

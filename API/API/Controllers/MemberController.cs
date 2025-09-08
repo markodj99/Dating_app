@@ -31,7 +31,7 @@ namespace API.Controllers
             return Ok(ToDto.PhotosToPhotoDtos(await _repo.GetPhotosForMemberAsync(id)));
         }
 
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<ActionResult> UpdateMember(MemberUpdateDto memberUpdate)
         {
             string? id = User.GetMemberId();
