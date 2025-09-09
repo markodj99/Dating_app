@@ -1,5 +1,6 @@
 ﻿using API.DTO;
 using API.Extension;
+using API.Interface;
 using API.Model;
 using API.Repository.IRepository;
 using API.Util;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [Authorize]
-    public class MemberController(IMemberRepository _repo) : BaseAPIController
+    public class MemberController(IMemberRepository _repo, IPhotoService _photoService) : BaseAPIController
     {
         [HttpGet("all")]
         public async Task<ActionResult<IReadOnlyList<MemberDto>>> GetAllMembers()
@@ -26,7 +27,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}/photos")]
-        public async Task<ActionResult<IReadOnlyList<Photo>>> GetMemberPhotos(string id)
+        public async Task<ActionResult<IReadOnlyList<PhotoDto>>> GetMemberPhotos(string id)
         {
             return Ok(ToDto.PhotosToPhotoDtos(await _repo.GetPhotosForMemberAsync(id)));
         }
@@ -34,9 +35,7 @@ namespace API.Controllers
         [HttpPut("update")]
         public async Task<ActionResult> UpdateMember(MemberUpdateDto memberUpdate)
         {
-            string? id = User.GetMemberId();
-
-            var member = await _repo.GetMemberByIdWithUserAsync(id);
+            var member = await GetMember();
             if (member is null) return BadRequest("Could not get member");
 
             ToDto.MemberUpdateDtoToMember(member, memberUpdate);
@@ -44,6 +43,77 @@ namespace API.Controllers
 
             if (await _repo.SaveAllAsync()) return NoContent();
             return BadRequest("Failed to update member");
+        }
+
+        [HttpPost("add-photo")]
+
+        public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
+        {
+            var member = await GetMember();
+            if (member is null) return BadRequest("Could not get member");
+
+            var result = await _photoService.UploadPhotoAsync(file);
+            if (result.Error is not null) return BadRequest(result.Error.Message);
+
+            var photo = new Photo
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                PublicId = result.PublicId,
+                MemberId = member.Id
+            };
+
+            if (member.ImageUrl is null)
+            {
+                member.ImageUrl = photo.Url;
+                member.User.ImageUrl = photo.Url;
+            }
+
+            member.Photos.Add(photo);
+
+            if (await _repo.SaveAllAsync()) return Ok(ToDto.PhotoToPhotoDto(photo));
+            return BadRequest("Problem adding ptoto");
+        }
+
+        [HttpPut("set-main-photo/{photoId}")]
+        public async Task<ActionResult> SetMainPhoto(int photoId)
+        {
+            var member = await GetMember();
+            if (member is null) return BadRequest("Could not get member");
+
+            var photo = member.Photos.SingleOrDefault(x => x.Id == photoId);
+            if (member.ImageUrl == photo?.Url || photo is null) return BadRequest("Can not set this as main image");
+
+            member.ImageUrl = photo.Url;
+            member.User.ImageUrl = photo.Url;
+
+            if (await _repo.SaveAllAsync()) return NoContent();
+            return BadRequest("Something went wrong");
+        }
+
+        [HttpDelete("delete-photo/{photoId}")]
+        public async Task<ActionResult> DeletePhoto(int photoId)
+        {
+            var member = await GetMember();
+            if (member is null) return BadRequest("Could not get member");
+
+            var photo = member.Photos.SingleOrDefault(x => x.Id == photoId);
+            if (photo is null || photo.Url == member.ImageUrl) return BadRequest("Could not find photo or it is main photo");
+
+            if (photo.PublicId is not null)
+            {
+                var result = await _photoService.DeletePhotoAsync(photo.PublicId);
+                if (result.Error is not null) return BadRequest(result.Error.Message);
+            }
+
+            member.Photos.Remove(photo);
+            if (await _repo.SaveAllAsync()) return Ok();
+            return BadRequest("Problem deleting a photo");
+        }
+
+        private async Task<Member?> GetMember()
+        {
+            string id = User.GetMemberId();
+            return await _repo.GetMemberUpdateAsync(id);
         }
     }
 }

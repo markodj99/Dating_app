@@ -12,7 +12,11 @@ namespace API.Middleware
 			{
 				await next(context);
 			}
-			catch (Exception ex)
+            catch (TaskCanceledException)
+            {
+                // ignore
+            }
+            catch (Exception ex)
 			{
 				logger.LogError(ex, "{Message}", ex.Message);
                 context.Response.ContentType = "application/json";

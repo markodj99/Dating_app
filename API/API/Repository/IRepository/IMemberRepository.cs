@@ -8,7 +8,7 @@ namespace API.Repository.IRepository
         Task<bool> SaveAllAsync();
         Task<IReadOnlyList<Member>> GetMembersAsync();
         Task<Member?> GetMemberByIdAsync(string id);
-        Task<Member?> GetMemberByIdWithUserAsync(string id);
+        Task<Member?> GetMemberUpdateAsync(string id);
         Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId);
     }
 }

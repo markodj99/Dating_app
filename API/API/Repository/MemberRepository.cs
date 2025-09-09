@@ -12,9 +12,12 @@ namespace API.Repository
             return await _context.Members.FindAsync(id);
         }
 
-        public async Task<Member?> GetMemberByIdWithUserAsync(string id)
+        public async Task<Member?> GetMemberUpdateAsync(string id)
         {
-            return await _context.Members.Include(x  => x.User).FirstOrDefaultAsync(x => x.Id.Equals(id));
+            return await _context.Members
+                .Include(x => x.User)
+                .Include(x => x.Photos)
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
         public async Task<IReadOnlyList<Member>> GetMembersAsync()

@@ -3,6 +3,7 @@ using API.Interface;
 using API.Repository;
 using API.Repository.IRepository;
 using API.Service;
+using API.Util;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Extension
@@ -22,6 +23,9 @@ namespace API.Extension
             services.AddCors();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IMemberRepository, MemberRepository>();
+            services.AddScoped<IPhotoService, PhotoService>();
+
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
 
             return services;
         }
