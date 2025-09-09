@@ -39,6 +39,9 @@ export class MemberPhotos implements OnInit {
         this.loading.set(false);
         this.photos.update(photos => [...photos, photo]);
         this.toastService.success('Photo uploaded successfully');
+        if (!this.memberService.member()?.imageUrl) {
+        this.setMainPhotoLocal(photo);
+        }
       },
       error: () => {
         this.loading.set(false);
@@ -50,14 +53,7 @@ export class MemberPhotos implements OnInit {
   setMainPhoto(photo: Photo) {
     this.memberService.setMainPhoto(photo).subscribe({
       next: () => {
-        const currentUser = this.accountService.currentUser();
-        if (currentUser) currentUser.imageUrl = photo.url;
-        this.accountService.currentUser.set(currentUser);
-
-        this.memberService.member.update(member => ({
-          ...member!,
-          imageUrl: photo.url
-        }));
+        this.setMainPhotoLocal(photo);
       },
       error: () => this.toastService.error('Failed to set main photo')
     });
@@ -71,5 +67,17 @@ export class MemberPhotos implements OnInit {
       },
       error: () => this.toastService.error('Failed to delete photo')
     });
+  }
+
+  private setMainPhotoLocal(photo: Photo)
+  {
+    const currentUser = this.accountService.currentUser();
+    if (currentUser) currentUser.imageUrl = photo.url;
+    this.accountService.currentUser.set(currentUser);
+
+    this.memberService.member.update(member => ({
+      ...member!,
+      imageUrl: photo.url
+    }));
   }
 } 
