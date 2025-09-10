@@ -16,7 +16,6 @@ namespace API.Controllers
         {
             if (await Hlp.UsernameExists(registerDto.Username, _context)) return BadRequest("Username already in use.");
             if (await Hlp.EmailExists(registerDto.Email, _context)) return BadRequest("Email address already in use.");
-            if (!registerDto.Password.Equals(registerDto.ConfirmPassword)) return BadRequest("Passwords must match.");
 
             using var hmac = new HMACSHA512();
             var user = Hlp.CreateNewUser(hmac, registerDto);

@@ -10,8 +10,8 @@ namespace API.DTO
         public DateOnly DateOfBirth { get; set; }
         public string? ImageUrl { get; set; }
         public required string Username { get; set; }
-        public DateOnly Created { get; set; }
-        public DateOnly LastActive { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastActive { get; set; }
         public required string Gender { get; set; }
         public string? Description { get; set; }
         public required string City { get; set; }

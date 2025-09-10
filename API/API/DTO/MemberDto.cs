@@ -14,9 +14,9 @@ namespace API.DTO
         [Required]
         public string Username { get; set; } = "";
         [Required]
-        public DateOnly Created { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
+        public DateTime Created { get; set; } = DateTime.UtcNow;
         [Required]
-        public DateOnly LastActive { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
+        public DateTime LastActive { get; set; } = DateTime.UtcNow;
         [Required]
         public string Gender { get; set; } = "";
         [Required]

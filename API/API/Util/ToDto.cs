@@ -1,7 +1,5 @@
 ﻿using API.DTO;
-using API.Interface;
 using API.Model;
-using System.ComponentModel.DataAnnotations;
 
 namespace API.Util
 {
@@ -22,7 +20,6 @@ namespace API.Util
                 City = member.City,
                 Country = member.Country,
                 Photos = member.Photos
-
             };
         }
 
@@ -81,6 +78,15 @@ namespace API.Util
             oldMember.Country = updatedMember.Country ?? oldMember.Country;
 
             oldMember.User.Username = updatedMember.Username ?? oldMember.Username;
+        }
+
+        public static PaginatedResult<MemberDto> PRMemberToPRMemberDto(PaginatedResult<Member> members)
+        {
+            return new PaginatedResult<MemberDto>
+            {
+                MetaData = members.MetaData,
+                Items = (List<MemberDto>)MembersToMemberDtos(members.Items)
+            };
         }
     }
 }

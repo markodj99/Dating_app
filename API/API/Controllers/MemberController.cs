@@ -13,9 +13,12 @@ namespace API.Controllers
     public class MemberController(IMemberRepository _repo, IPhotoService _photoService) : BaseAPIController
     {
         [HttpGet("all")]
-        public async Task<ActionResult<IReadOnlyList<MemberDto>>> GetAllMembers()
+        [ProducesResponseType(typeof(PaginatedResult<MemberDto>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PaginatedResult<MemberDto>>> GetAllMembers([FromQuery] MemberParams memberParams)
         {
-            return Ok(ToDto.MembersToMemberDtos(await _repo.GetMembersAsync()));
+            memberParams.CurrentMemberId = User.GetMemberId();
+
+            return Ok(ToDto.PRMemberToPRMemberDto(await _repo.GetMembersAsync(memberParams)));
         }
 
         [HttpGet("{id}")]
@@ -46,9 +49,11 @@ namespace API.Controllers
         }
 
         [HttpPost("add-photo")]
-
-        public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
+        [ProducesResponseType(typeof(PhotoDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<PhotoDto>> AddPhoto([FromForm] AddPhotoDto dto)
         {
+            var file = dto.File;
             var member = await GetMember();
             if (member is null) return BadRequest("Could not get member");
 

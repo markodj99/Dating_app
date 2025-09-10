@@ -1,4 +1,5 @@
 ﻿using API.Model;
+using API.Util;
 
 namespace API.Repository.IRepository
 {
@@ -6,7 +7,7 @@ namespace API.Repository.IRepository
     {
         void Update(Member member);
         Task<bool> SaveAllAsync();
-        Task<IReadOnlyList<Member>> GetMembersAsync();
+        Task<PaginatedResult<Member>> GetMembersAsync(MemberParams memberParams);
         Task<Member?> GetMemberByIdAsync(string id);
         Task<Member?> GetMemberUpdateAsync(string id);
         Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId);
