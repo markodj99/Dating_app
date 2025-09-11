@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace API.Model
 {
@@ -21,5 +22,10 @@ namespace API.Model
         public User User { get; set; } = null!;
         // Navigation property to Photos
         public List<Photo> Photos { get; set; } = [];
+
+        [JsonIgnore]
+        public List<MemberLike> LikedByMembers { get; set; } = [];
+        [JsonIgnore]
+        public List<MemberLike> LikedMembers { get; set; } = [];
     }
 }

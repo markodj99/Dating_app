@@ -5,11 +5,14 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { RegisterCreds } from '../../types/registerCreds';
 import { LoginCreds } from '../../types/loginCreds';
 import { environment } from '../../environments/environment';
+import { LikesService } from './likes-service';
+import { clearHttpCache } from '../interceptors/loading-interceptor';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
+  private likesService = inject(LikesService);
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
@@ -35,12 +38,15 @@ export class AccountService {
     localStorage.removeItem('user');
     localStorage.removeItem('filters');
     this.currentUser.set(null);
+    this.likesService.clearLikeIds();
+    clearHttpCache();
   }
 
   private setCurrentUser(user: User | undefined): void {
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
       this.currentUser.set(user);
+      this.likesService.getLikeIds();
     }
   }
 }
