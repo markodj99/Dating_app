@@ -17,7 +17,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor])),
     provideAppInitializer(async () => {
       const initService = inject(InitService);
-
       return new Promise<void>(resolve => {
         setTimeout(async () => {
           try {
@@ -25,7 +24,6 @@ export const appConfig: ApplicationConfig = {
           } finally {
             const splash = document.getElementById('initial-splash');
             if (splash) splash.remove();
-
             resolve();
           }
         }, 500);

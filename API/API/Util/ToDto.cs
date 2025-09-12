@@ -6,8 +6,7 @@ namespace API.Util
     public class ToDto
     {
         public static MemberDto MemberToMemberDto(Member member)
-        {
-            return new MemberDto
+            => new()
             {
                 Id = member.Id,
                 DateOfBirth = member.DateOfBirth,
@@ -21,46 +20,32 @@ namespace API.Util
                 Country = member.Country,
                 Photos = member.Photos
             };
-        }
 
         public static IReadOnlyList<MemberDto> MembersToMemberDtos(IReadOnlyList<Member> members)
         {
             var membersList = new List<MemberDto>(members.Count);
-
-            foreach (var member in members)
-            {
-                membersList.Add(MemberToMemberDto(member)); 
-            }
-
+            foreach (var member in members) membersList.Add(MemberToMemberDto(member));
             return membersList;
         }
 
         public static PhotoDto PhotoToPhotoDto(Photo photo)
-        {
-            return new PhotoDto
+            => new()
             {
                 Id = photo.Id,
                 Url = photo.Url,
                 PublicId = photo.PublicId,
                 MemberId = photo.MemberId,
             };
-        }
 
         public static IReadOnlyList<PhotoDto> PhotosToPhotoDtos(IReadOnlyList<Photo> photos)
         {
             var photoList = new List<PhotoDto>(photos.Count);
-
-            foreach (var photo in photos)
-            {
-                photoList.Add(PhotoToPhotoDto(photo));
-            }
-
+            foreach (var photo in photos) photoList.Add(PhotoToPhotoDto(photo));
             return photoList;
         }
 
         public static UserDto UserToUserDto(User user, string token)
-        {
-            return new UserDto
+            =>  new()
             {
                 Id = user.Id,
                 Username = user.Username,
@@ -68,7 +53,6 @@ namespace API.Util
                 Token = token,
                 ImageUrl = user.ImageUrl,
             };
-        }
 
         public static void MemberUpdateDtoToMember(Member oldMember, MemberUpdateDto updatedMember)
         {
@@ -76,22 +60,18 @@ namespace API.Util
             oldMember.Description = updatedMember.Description ?? oldMember.Description;
             oldMember.City = updatedMember.City ?? oldMember.City;
             oldMember.Country = updatedMember.Country ?? oldMember.Country;
-
             oldMember.User.Username = updatedMember.Username ?? oldMember.Username;
         }
 
         public static PaginatedResult<MemberDto> PRMemberToPRMemberDto(PaginatedResult<Member> members)
-        {
-            return new PaginatedResult<MemberDto>
+            => new()
             {
                 MetaData = members.MetaData,
                 Items = (List<MemberDto>)MembersToMemberDtos(members.Items)
             };
-        }
 
         public static MessageDto MessageToMessageDto(Message message)
-        {
-            return new MessageDto
+            => new()
             {
                 Id = message.Id,
                 Content = message.Content,
@@ -104,6 +84,5 @@ namespace API.Util
                 RecipientUsername = message.Recipient.Username,
                 RecipientImageUrl = message.Recipient.ImageUrl,
             };
-        }
     }
 }

@@ -2,30 +2,18 @@
 
 namespace API.Controllers
 {
-    public class FaultyController : BaseAPIController
+    public class FaultyController : BaseApiController
     {
         [HttpGet("auth")]
-        public IActionResult GetAuth()
-        {
-            return Unauthorized();
-        }
+        public IActionResult GetAuth() => Unauthorized();
 
         [HttpGet("not-found")]
-        public IActionResult GetNotFound()
-        {
-            return NotFound();
-        }
+        public IActionResult GetNotFound() => NotFound();
 
         [HttpGet("server-error")]
-        public IActionResult GetServerError()
-        {
-            throw new Exception("Internal server error.");
-        }
+        public IActionResult GetServerError() => throw new Exception("Internal server error.");
 
         [HttpGet("bad-request")]
-        public IActionResult GetBadRequest()
-        {
-            return BadRequest();
-        }
+        public IActionResult GetBadRequest() => BadRequest();
     }
 }

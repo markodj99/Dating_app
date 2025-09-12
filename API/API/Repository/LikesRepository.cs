@@ -9,9 +9,7 @@ namespace API.Repository
     public class LikesRepository(AppDbContext _context) : ILikesRepository
     {
         public async Task<MemberLike?> GetMemberLikeAsync(string sourceMemberId, string targetMemberId)
-        {
-            return await _context.Likes.FindAsync(sourceMemberId, targetMemberId);
-        }
+            => await _context.Likes.FindAsync(sourceMemberId, targetMemberId);
 
         public async Task<PaginatedResult<Member>> GetMemberLikesAsync(LikesParams likesParams)
         {
@@ -43,26 +41,15 @@ namespace API.Repository
         }
 
         public async Task<IReadOnlyList<string>> GetCurrentMemberLikeIdAsync(string memberId)
-        {
-            return await _context.Likes
+            => await _context.Likes
                 .Where(x => x.SourceMemberId.Equals(memberId))
                 .Select(x => x.TargetMemberId)
                 .ToListAsync();
-        }
 
-        public void DeleteLike(MemberLike like)
-        {
-            _context.Likes.Remove(like);
-        }
+        public void DeleteLike(MemberLike like) => _context.Likes.Remove(like);
 
-        public void AddLike(MemberLike like)
-        {
-            _context.Likes.Add(like);
-        }
+        public void AddLike(MemberLike like) => _context.Likes.Add(like);
 
-        public async Task<bool> SaveAllChangesAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
+        public async Task<bool> SaveAllChangesAsync() => await _context.SaveChangesAsync() > 0;
     }
 }

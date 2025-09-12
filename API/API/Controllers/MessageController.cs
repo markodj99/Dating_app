@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class MessagesController(IMessageRepository _messageRepo, IMemberRepository _memberRepo) : BaseAPIController
+    public class MessageController(IMessageRepository _messageRepo, IMemberRepository _memberRepo) : BaseApiController
     {
         [HttpPost]
         public async Task<ActionResult<MessageDto>> CreateMessage(CreateMessageDto createMessageDto)
@@ -32,7 +32,7 @@ namespace API.Controllers
             };
 
             _messageRepo.AddMessage(message);
-            if (await _messageRepo.SaveAllAsync()) return Ok(ToDto.MessageToMessageDto(message));
+            if (await _messageRepo.SaveAllChangesAsync()) return Ok(ToDto.MessageToMessageDto(message));
             return BadRequest("Could not send message.");
         }
     }

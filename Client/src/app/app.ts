@@ -11,10 +11,7 @@ import { Router, RouterOutlet } from '@angular/router';
 export class App {
   protected readonly title: string = 'Dating App';
   protected router = inject(Router);
-
 }
-
-
 
   // ako nekad zatreba
   // // constructor(private http: HttpClient) { } stari nacin za DI

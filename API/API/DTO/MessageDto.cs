@@ -1,6 +1,4 @@
-﻿using API.Model;
-
-namespace API.DTO
+﻿namespace API.DTO
 {
     public class MessageDto
     {

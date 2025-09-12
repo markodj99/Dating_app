@@ -1,4 +1,5 @@
-﻿using CloudinaryDotNet.Actions;
+﻿using API.Model;
+using CloudinaryDotNet.Actions;
 
 namespace API.Interface
 {
@@ -6,6 +7,6 @@ namespace API.Interface
     {
         Task<ImageUploadResult> UploadPhotoAsync(IFormFile file);
         Task<DeletionResult> DeletePhotoAsync(string publicId);
-
+        Photo CreateNewPhoto(ImageUploadResult result, string memberId);
     }
 }

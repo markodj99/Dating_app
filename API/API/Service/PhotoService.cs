@@ -1,4 +1,5 @@
 ﻿using API.Interface;
+using API.Model;
 using API.Util;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
@@ -12,24 +13,14 @@ namespace API.Service
 
         public PhotoService(IOptions<CloudinarySettings> condif)
         {
-            var account = new Account(condif.Value.CloudName,
-                condif.Value.ApiKey, condif.Value.ApiSecret);
-
-            _cloudinary = new Cloudinary(account);
+            _cloudinary = new Cloudinary(new Account(condif.Value.CloudName, condif.Value.ApiKey, condif.Value.ApiSecret));
         }
-
-        public async Task<DeletionResult> DeletePhotoAsync(string publicId)
-        {
-            var deleteParams = new DeletionParams(publicId);
-
-            return await _cloudinary.DestroyAsync(deleteParams);
-        }
-
+        
         public async Task<ImageUploadResult> UploadPhotoAsync(IFormFile file)
         {
             var uploadResult = new ImageUploadResult();
 
-            if(file.Length > 0)
+            if (file.Length > 0)
             {
                 await using var stream = file.OpenReadStream();
                 var uploadParams = new ImageUploadParams
@@ -43,5 +34,15 @@ namespace API.Service
 
             return uploadResult;
         }
+
+        public async Task<DeletionResult> DeletePhotoAsync(string publicId) => await _cloudinary.DestroyAsync(new DeletionParams(publicId));
+
+        public Photo CreateNewPhoto(ImageUploadResult result, string memberId)
+            => new()
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                PublicId = result.PublicId,
+                MemberId = memberId
+            };
     }
 }

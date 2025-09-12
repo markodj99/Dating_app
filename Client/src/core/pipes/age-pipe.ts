@@ -4,7 +4,6 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'age'
 })
 export class AgePipe implements PipeTransform {
-
   transform(value: string): number {
     const today = new Date();
     const dob = new Date(value);
@@ -19,5 +18,4 @@ export class AgePipe implements PipeTransform {
 
     return age;
   }
-
 }

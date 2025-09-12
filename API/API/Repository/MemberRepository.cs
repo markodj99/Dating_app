@@ -8,18 +8,9 @@ namespace API.Repository
 {
     public class MemberRepository(AppDbContext _context) : IMemberRepository
     {
-        public async Task<Member?> GetMemberByIdAsync(string id)
-        {
-            return await _context.Members.FindAsync(id);
-        }
+        public void Update(Member member) => _context.Entry(member).State = EntityState.Modified;
 
-        public async Task<Member?> GetMemberUpdateAsync(string id)
-        {
-            return await _context.Members
-                .Include(x => x.User)
-                .Include(x => x.Photos)
-                .FirstOrDefaultAsync(x => x.Id.Equals(id));
-        }
+        public async Task<bool> SaveAllAsync() => await _context.SaveChangesAsync() > 0;
 
         public async Task<PaginatedResult<Member>> GetMembersAsync(MemberParams memberParams)
         {
@@ -40,20 +31,16 @@ namespace API.Repository
             return await PaginationHelper.CreateAsync(query, memberParams.PageNumber, memberParams.PageSize);
         }
 
+        public async Task<Member?> GetMemberByIdAsync(string id) => await _context.Members.FindAsync(id);
+
+        public async Task<Member?> GetMemberUpdateAsync(string id)
+            => await _context.Members
+                .Include(x => x.User)
+                .Include(x => x.Photos)
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
         public async Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId)
-        {
-            return await _context.Members.Where(x => x.Id.Equals(memberId))
+            => await _context.Members.Where(x => x.Id.Equals(memberId))
                 .SelectMany(x => x.Photos).ToListAsync();
-        }
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
-
-        public void Update(Member member)
-        {
-            _context.Entry(member).State = EntityState.Modified;
-        }
     }
 }

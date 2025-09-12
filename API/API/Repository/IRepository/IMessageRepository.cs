@@ -1,5 +1,4 @@
-﻿using API.DTO;
-using API.Model;
+﻿using API.Model;
 using API.Util;
 
 namespace API.Repository.IRepository
@@ -11,6 +10,6 @@ namespace API.Repository.IRepository
         Task<Message?> GetMessageAsync(string messageId);
         Task<PaginatedResult<Message>> GetMessagesForMemberAsync();
         Task<IReadOnlyList<Message>> GetMessageThreadAsync(string currentMemberId, string recipientId);
-        Task<bool> SaveAllAsync();
+        Task<bool> SaveAllChangesAsync();
     }
 }

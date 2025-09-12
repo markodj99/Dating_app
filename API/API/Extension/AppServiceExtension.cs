@@ -21,11 +21,13 @@ namespace API.Extension
             services.AddEndpointsApiExplorer();
 
             services.AddCors();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IMemberRepository, MemberRepository>();
             services.AddScoped<ILikesRepository, LikesRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
-            services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<LogUserActivity>();
 
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));

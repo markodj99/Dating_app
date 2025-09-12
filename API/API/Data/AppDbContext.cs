@@ -50,10 +50,7 @@ namespace API.Data
             {
                 foreach (var property in entityType.GetProperties())
                 {
-                    if (property.ClrType == typeof(DateTime))
-                    {
-                        property.SetValueConverter(dateTimeConverter);
-                    }
+                    if (property.ClrType == typeof(DateTime)) property.SetValueConverter(dateTimeConverter);
                 }
             }
         }

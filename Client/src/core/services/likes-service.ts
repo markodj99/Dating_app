@@ -14,7 +14,7 @@ export class LikesService {
 
 
   toggleLike(targetMemberId: string) {
-    return this.http.post(`${this.baseUrl}likes/${targetMemberId}`, {});
+    return this.http.post(`${this.baseUrl}like/${targetMemberId}`, {});
   }
 
   getLikes(predicate: string, pageNumber: number, pageSize: number) {
@@ -23,11 +23,11 @@ export class LikesService {
     params = params.append('pageSize', pageSize);
     params = params.append('predicate', predicate);
 
-    return this.http.get<PaginatedResult<Member>>(this.baseUrl + 'likes', { params });
+    return this.http.get<PaginatedResult<Member>>(this.baseUrl + 'like', { params });
   }
 
   getLikeIds(){
-    return this.http.get<string[]>(this.baseUrl + 'likes/list').subscribe({
+    return this.http.get<string[]>(this.baseUrl + 'like/list').subscribe({
       next: ids => this.likesIds.set(ids)
     });
   }

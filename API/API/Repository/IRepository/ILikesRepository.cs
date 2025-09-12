@@ -1,5 +1,4 @@
-﻿using API.DTO;
-using API.Model;
+﻿using API.Model;
 using API.Util;
 
 namespace API.Repository.IRepository

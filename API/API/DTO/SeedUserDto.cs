@@ -1,7 +1,4 @@
-﻿using API.Model;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace API.DTO
+﻿namespace API.DTO
 {
     public class SeedUserDto
     {

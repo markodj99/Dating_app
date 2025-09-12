@@ -1,6 +1,5 @@
 ﻿using API.Model;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DTO
 {
