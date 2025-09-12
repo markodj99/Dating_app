@@ -88,5 +88,22 @@ namespace API.Util
                 Items = (List<MemberDto>)MembersToMemberDtos(members.Items)
             };
         }
+
+        public static MessageDto MessageToMessageDto(Message message)
+        {
+            return new MessageDto
+            {
+                Id = message.Id,
+                Content = message.Content,
+                DateRead = message.DateRead,
+                MessageSent = message.MessageSent,
+                SenderId = message.SenderId,
+                SenderUsername = message.Sender.Username,
+                SenderImageUrl = message.Sender.ImageUrl,
+                RecipientId = message.RecipientId,
+                RecipientUsername = message.Recipient.Username,
+                RecipientImageUrl = message.Recipient.ImageUrl,
+            };
+        }
     }
 }
