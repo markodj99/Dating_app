@@ -84,5 +84,19 @@ namespace API.Util
                 RecipientUsername = message.Recipient.Username,
                 RecipientImageUrl = message.Recipient.ImageUrl,
             };
+
+        public static IReadOnlyList<MessageDto> MessagesToMessageDtos(IReadOnlyList<Message> messages)
+        {
+            var messagesList = new List<MessageDto>(messages.Count);
+            foreach (var message in messages) messagesList.Add(MessageToMessageDto(message));
+            return messagesList;
+        }
+
+        public static PaginatedResult<MessageDto> PRMessageToPRMessageDto(PaginatedResult<Message> messages)
+            => new()
+            {
+                MetaData = messages.MetaData,
+                Items = (List<MessageDto>)MessagesToMessageDtos(messages.Items)
+            };
     }
 }

@@ -24,6 +24,7 @@ namespace API.Extension
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IMemberRepository, MemberRepository>();
             services.AddScoped<ILikesRepository, LikesRepository>();

@@ -8,7 +8,7 @@ namespace API.Repository.IRepository
         void AddMessage(Message message);
         void DeleteMessage(Message message);
         Task<Message?> GetMessageAsync(string messageId);
-        Task<PaginatedResult<Message>> GetMessagesForMemberAsync();
+        Task<PaginatedResult<Message>> GetMessagesForMemberAsync(MessageParams messageParams);
         Task<IReadOnlyList<Message>> GetMessageThreadAsync(string currentMemberId, string recipientId);
         Task<bool> SaveAllChangesAsync();
     }
