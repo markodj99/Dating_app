@@ -1,6 +1,11 @@
 ﻿using API.DTO;
 using API.Interface;
 using API.Model;
+using API.Repository.IRepository;
+using API.Util;
+using Azure;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -21,21 +26,34 @@ namespace API.Service
             return true;
         }
 
-        public User CreateNewUser(HMACSHA512 hmac, RegisterDto registerDto)
+        public User CreateNewUser(RegisterDto registerDto)
             => new()
             {
-                Username = registerDto.Username,
+                UserName = registerDto.UserName,
                 Email = registerDto.Email,
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key,
                 Member = new Member
                 {
                     DateOfBirth = DateOnly.FromDateTime(registerDto.DateOfBirth),
-                    Username = registerDto.Username,
+                    UserName = registerDto.UserName,
                     Gender = registerDto.Gender,
                     City = registerDto.City,
                     Country = registerDto.Country,
                 }
             };
+
+        public async Task<CookieOptions> SetRefreshTokenCookie(User user, string refreshToken, IAccountRepository repo)
+        {
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpire = DateTime.UtcNow.AddDays(5);
+            await repo.UpdateAsync(user);
+
+            return new CookieOptions()
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(7),
+            };
+        }
     }
 }

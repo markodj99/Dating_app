@@ -35,6 +35,8 @@ namespace API.Controllers
         [HttpPut("update")]
         public async Task<ActionResult> UpdateMember(MemberUpdateDto memberUpdate)
         {
+            if(!string.IsNullOrEmpty(memberUpdate.UserName) && memberUpdate.UserName.Contains(' '))
+                return BadRequest("Username cannot contain spaces.");
             var member = await GetMember();
             if (member is null) return BadRequest("Something went wrong. Please try again later.");
 

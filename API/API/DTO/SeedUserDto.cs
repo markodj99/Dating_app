@@ -6,7 +6,7 @@
         public required string Email { get; set; }
         public DateOnly DateOfBirth { get; set; }
         public string? ImageUrl { get; set; }
-        public required string Username { get; set; }
+        public required string UserName { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastActive { get; set; }
         public required string Gender { get; set; }

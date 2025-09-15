@@ -1,7 +1,8 @@
 export interface User {
     id: string,
-    username: string,
+    userName: string,
     email: string,
     token: string,
-    imageUrl?: string
+    imageUrl?: string,
+    roles: string[]
 }

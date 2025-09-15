@@ -19,35 +19,58 @@ export class AccountService {
   currentUser = signal<User | null>(null);
 
   register(creds: RegisterCreds) {
-    return this.http.post<User>(this.baseUrl + 'account/register', creds).pipe(
+    return this.http.post<User>(this.baseUrl + 'account/register', creds, { withCredentials: true }).pipe(
       tap(user => {
         this.setCurrentUser(user);
+        this.startTokenRefreshInterval();
       })
     );
   }
 
   login(creds: LoginCreds) {
-    return this.http.post<User>(this.baseUrl + 'account/login', creds).pipe(
+    return this.http.post<User>(this.baseUrl + 'account/login', creds, { withCredentials: true }).pipe(
       tap(user => {
         this.setCurrentUser(user);
+        this.startTokenRefreshInterval();
       })
     );
   }
 
+  refreshToken() {
+    return this.http.post<User>(this.baseUrl + 'account/refresh-token', {}, { withCredentials: true });
+  }
+
+  startTokenRefreshInterval() {
+    setInterval(() => {
+      console.log("USAO USAO USAO");
+      this.http.post<User>(this.baseUrl + 'account/refresh-token', {}, { withCredentials: true }).subscribe({
+        next: user => this.setCurrentUser(user),
+        error: () => this.logout()
+      });
+    }, 6 * 60 * 1000);
+  }
+
   logout() {
-    localStorage.removeItem('user');
     localStorage.removeItem('filters');
     this.currentUser.set(null);
     this.likesService.clearLikeIds();
     clearHttpCache();
   }
 
-  private setCurrentUser(user: User | undefined): void {
+  setCurrentUser(user: User | undefined): void {
     if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
+      user.roles = this.getRolesFromToken(user);
       this.currentUser.set(user);
       this.likesService.getLikeIds();
     }
+  }
+
+  private getRolesFromToken(user: User): string[] {
+    const payload = user.token.split('.')[1];
+    const decoded = atob(payload);
+
+    const jsonPayload = JSON.parse(decoded);
+    return Array.isArray(jsonPayload.role) ? jsonPayload.role : [jsonPayload.role];
   }
 }
 

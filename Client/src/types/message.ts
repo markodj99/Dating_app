@@ -4,10 +4,10 @@ export interface Message {
   dateRead?: string,
   messageSent: string,
   senderId: string,
-  senderUsername: string,
+  senderUserName: string,
   senderImageUrl: string,
   recipientId: string,
-  recipientUsername: string,
+  recipientUserName: string,
   recipientImageUrl: string,
   currentUserSender?: boolean
 }

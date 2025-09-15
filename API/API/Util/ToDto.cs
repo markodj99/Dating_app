@@ -11,7 +11,7 @@ namespace API.Util
                 Id = member.Id,
                 DateOfBirth = member.DateOfBirth,
                 ImageUrl = member.ImageUrl,
-                Username = member.Username,
+                UserName = member.UserName,
                 Created = member.Created,
                 LastActive = member.LastActive,
                 Gender = member.Gender,
@@ -48,19 +48,19 @@ namespace API.Util
             =>  new()
             {
                 Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
+                UserName = user.UserName!,
+                Email = user.Email!,
                 Token = token,
                 ImageUrl = user.ImageUrl,
             };
 
         public static void MemberUpdateDtoToMember(Member oldMember, MemberUpdateDto updatedMember)
         {
-            oldMember.Username = updatedMember.Username ?? oldMember.Username;
+            oldMember.UserName = updatedMember.UserName ?? oldMember.UserName;
             oldMember.Description = updatedMember.Description ?? oldMember.Description;
             oldMember.City = updatedMember.City ?? oldMember.City;
             oldMember.Country = updatedMember.Country ?? oldMember.Country;
-            oldMember.User.Username = updatedMember.Username ?? oldMember.Username;
+            oldMember.User.UserName = updatedMember.UserName ?? oldMember.UserName;
         }
 
         public static PaginatedResult<MemberDto> PRMemberToPRMemberDto(PaginatedResult<Member> members)
@@ -78,10 +78,10 @@ namespace API.Util
                 DateRead = message.DateRead,
                 MessageSent = message.MessageSent,
                 SenderId = message.SenderId,
-                SenderUsername = message.Sender.Username,
+                SenderUserName = message.Sender.UserName,
                 SenderImageUrl = message.Sender.ImageUrl,
                 RecipientId = message.RecipientId,
-                RecipientUsername = message.Recipient.Username,
+                RecipientUserName = message.Recipient.UserName,
                 RecipientImageUrl = message.Recipient.ImageUrl,
             };
 

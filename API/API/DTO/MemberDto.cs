@@ -11,7 +11,7 @@ namespace API.DTO
         public DateOnly DateOfBirth { get; set; }
         public string? ImageUrl { get; set; }
         [Required]
-        public string Username { get; set; } = "";
+        public string UserName { get; set; } = "";
         [Required]
         public DateTime Created { get; set; } = DateTime.UtcNow;
         [Required]

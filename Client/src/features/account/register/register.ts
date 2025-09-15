@@ -27,7 +27,7 @@ export class Register  {
 
   constructor() {
     this.credentialsForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
+      userName: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20), this.noWhitespaceValidator]],
       email: ['', [Validators.required, Validators.minLength(4), Validators.email]],
       password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20), this.matchValue('password')]]
@@ -42,6 +42,11 @@ export class Register  {
       city: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
       country: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]]
     });
+  }
+
+  noWhitespaceValidator(control: FormControl): ValidationErrors | null {
+    const isWhitespace = (control.value || '').indexOf(' ') >= 0;
+    return isWhitespace ? { whitespace: true } : null;
   }
 
   matchValue(matchTo: string): ValidatorFn {

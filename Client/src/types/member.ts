@@ -2,7 +2,7 @@ export interface Member {
     id:string;
     dateOfBirth: string;
     imageUrl?: string;
-    username: string;
+    userName: string;
     created: string;
     lastActive: string;
     gender: string;

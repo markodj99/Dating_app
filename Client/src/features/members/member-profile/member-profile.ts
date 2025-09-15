@@ -21,7 +21,7 @@ export class MemberProfile implements OnInit, OnDestroy {
   }
   protected memberService = inject(MemberService);
   protected editableMember: EditableMember = {
-    username: '',
+    userName: '',
     description: '',
     city: '',
     country: ''
@@ -31,7 +31,7 @@ export class MemberProfile implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.editableMember = {
-      username: this.memberService.member()?.username || '',
+      userName: this.memberService.member()?.userName || '',
       description: this.memberService.member()?.description || '',
       city: this.memberService.member()?.city || '',
       country: this.memberService.member()?.country || ''
@@ -45,8 +45,8 @@ export class MemberProfile implements OnInit, OnDestroy {
     this.memberService.updateMember(this.editableMember).subscribe({
       next: () => {
         const curretUser = this.accountService.currentUser();
-        if (curretUser && updatedMember.username !== curretUser?.username) {
-          curretUser.username = updatedMember.username;
+        if (curretUser && updatedMember.userName !== curretUser?.userName) {
+          curretUser.userName = updatedMember.userName;
           this.accountService.currentUser.set(curretUser);
           localStorage.setItem('user', JSON.stringify(curretUser));
         }
@@ -57,7 +57,10 @@ export class MemberProfile implements OnInit, OnDestroy {
         this.editForm?.reset(updatedMember);
       }
     });
+  }
 
+  get containsWhiteSpaces() {
+    return (this.editableMember.userName || '').indexOf(' ') >= 0;
   }
 
   ngOnDestroy(): void {

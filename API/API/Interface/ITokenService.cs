@@ -4,6 +4,7 @@ namespace API.Interface
 {
     public interface ITokenService
     {
-        string CreateJWTToken(User user);
+        Task<string> CreateJWTToken(User user);
+        string GenerateRefreshToken();
     }
 }

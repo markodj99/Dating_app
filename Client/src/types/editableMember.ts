@@ -1,5 +1,5 @@
 export interface EditableMember {
-    username: string,
+    userName: string,
     description?: string,
     city: string,
     country: string

@@ -29,4 +29,7 @@
   @if (control.hasError('passwordMismatch') && control.touched) {
     <div class="validation-hint text-error text-xs">Passwords do not match</div>
   }
+  @if (control.hasError('whitespace') && control.touched) {
+    <div class="validation-hint text-error text-xs">Username cannot contain spaces</div>
+  }
 </label>

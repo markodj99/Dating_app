@@ -3,7 +3,7 @@
   @for (photo of photos; track photo.id) {
   <div class="relative">
     <img src="{{ photo.url }}" alt="photo of member" class="w-full rounded-lg" />
-    @if (accountService.currentUser()?.username === memberService.member()?.username) {
+    @if (accountService.currentUser()?.userName === memberService.member()?.userName) {
       <app-star-button
           [disabled]="photo.url === memberService.member()?.imageUrl"
           [selected]="photo.url === memberService.member()?.imageUrl"

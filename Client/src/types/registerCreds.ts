@@ -1,6 +1,6 @@
 export interface RegisterCreds {
     email: string,
-    username: string,
+    userName: string,
     password: string,
     confirmPassword: string,
     gender: string,

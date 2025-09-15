@@ -25,8 +25,15 @@
       <a routerLink="/members" routerLinkActive="text-accent">Matches</a>
       <a routerLink="/lists" routerLinkActive="text-accent">Lists</a>
       <a routerLink="/messages" routerLinkActive="text-accent">Messages</a>
+
+      @if (accountService.currentUser()?.roles?.includes('Admin')
+          || this.accountService.currentUser()?.roles?.includes('Moderator')) { 
+        <a routerLink="/admin" routerLinkActive="text-accent">Admin</a>
       }
-      <a routerLink="/errors" routerLinkActive="text-accent">Errors</a>
+      @if (accountService.currentUser()?.roles?.includes('Admin')) {
+         <a routerLink="/errors" routerLinkActive="text-accent">Errors</a>
+      }
+    }
     </nav>
     @if (busyService.busyRequestCount() > 0 ) {
       <span class="loading loading-spinner text-accent"></span>
@@ -76,7 +83,7 @@
             alt="user avatar"
             class="w-10 h-10 rounded-full"
           />
-          <span>{{ user.username }}</span>
+          <span>{{ user.userName }}</span>
         </div>
         <ul
           tabindex="0"
