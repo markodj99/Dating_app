@@ -40,5 +40,18 @@ namespace API.Repository
         }
 
         public async Task<bool> SaveAllChangesAsync() => await _context.SaveChangesAsync() > 0;
+
+        public void AddGroup(Group group) => _context.Groups.Add(group);
+
+        public async Task RemoveConnectionAsync(string connectionId)
+             => await _context.Connections.Where(x => x.ConnectionId == connectionId).ExecuteDeleteAsync();
+
+        public async Task<Connection?> GetConnectionAsync(string connectionId) => await _context.Connections.FindAsync(connectionId);
+
+        public async Task<Group?> GetMessageGroupAsync(string groupName)
+            => await _context.Groups.Include(x => x.Connections).FirstOrDefaultAsync(x => x.Name == groupName);
+
+        public async Task<Group?> GetGroupForConnectionAsync(string connectionId)
+            => await _context.Groups.Include(x => x.Connections.Any(c => c.ConnectionId == connectionId)).FirstOrDefaultAsync();
     }
 }

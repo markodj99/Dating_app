@@ -3,13 +3,16 @@
   <div class="card bg-base-100 flex flex-col h-[85vh] w-1/4">
     <img
       src="{{ member.imageUrl || '/user.png' }}"
-      alt="/user.png"
+      alt="user avatar"
       class="rounded-full mx-10 mt-3 object-cover"
     />
     <div class="card-body">
       <div class="flex flex-col items-center">
-        <div class="flex text-2xl text-primary">
+        <div class="flex text-2xl text-primary items-center">
           {{ member.userName }}, {{ member.dateOfBirth | age }}
+          @if (presenceService.onlineUsers().includes(member.id)) {
+            <span class="status status-success status-xl ml-2 mt-1"></span>
+          }
         </div>
         <div class="text-sm">{{ member.city }}, {{ member.country }}</div>
       </div>

@@ -7,6 +7,7 @@ import { LoginCreds } from '../../types/loginCreds';
 import { environment } from '../../environments/environment';
 import { LikesService } from './likes-service';
 import { clearHttpCache } from '../interceptors/loading-interceptor';
+import { PresenceService } from './presence-service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class AccountService {
   private likesService = inject(LikesService);
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
+  private presenceService = inject(PresenceService);
 
   currentUser = signal<User | null>(null);
 
@@ -55,14 +57,15 @@ export class AccountService {
     this.currentUser.set(null);
     this.likesService.clearLikeIds();
     clearHttpCache();
+    this.presenceService.stopHubConnection();
   }
 
-  setCurrentUser(user: User | undefined): void {
-    if (user) {
-      user.roles = this.getRolesFromToken(user);
-      this.currentUser.set(user);
-      this.likesService.getLikeIds();
-    }
+  setCurrentUser(user: User) {
+    user.roles = this.getRolesFromToken(user);
+    this.currentUser.set(user);
+    this.likesService.getLikeIds();
+
+    if (!this.presenceService.isConnected()) this.presenceService.createHubConnection(user);
   }
 
   private getRolesFromToken(user: User): string[] {
