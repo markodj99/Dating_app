@@ -1,11 +1,11 @@
 ﻿using API.DTO;
+using API.Extension;
 using API.Interface;
 using API.Model;
 using API.Repository.IRepository;
 using API.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Security.Cryptography;
 
 namespace API.Controllers
 {
@@ -50,6 +50,15 @@ namespace API.Controllers
             if (user is null) return Unauthorized();
 
             return Ok(await SetResponseAndReturnUserDto(user));
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<ActionResult> Logout()
+        {
+            await _repo.Logout(User.GetMemberId());
+            Response.Cookies.Delete("refreshToken");
+            return Ok();
         }
 
         private async Task<UserDto> SetResponseAndReturnUserDto(User user)

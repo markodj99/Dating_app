@@ -14,5 +14,6 @@ namespace API.Repository.IRepository
         Task<bool> PasswordsMatch(User user, string password);
         Task<bool> UserNameExistsAsync(string username);
         Task<bool> EmailExistsAsync(string email);
+        Task Logout(string userId);
     }
 }

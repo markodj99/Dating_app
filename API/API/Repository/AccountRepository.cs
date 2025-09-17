@@ -25,5 +25,9 @@ namespace API.Repository
             => await _userManager.Users.AnyAsync(x => x.UserName!.ToLower().Equals(username.ToLower()));
 
         public async Task<bool> EmailExistsAsync(string email) => await _userManager.Users.AnyAsync(x => x.Email!.ToLower().Equals(email.ToLower()));
+
+        public async Task Logout(string userId) =>
+            await _userManager.Users.Where(x => x.Id == userId)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.RefreshToken, _ => null).SetProperty(x => x.RefreshTokenExpire, _ => null));
     }
 }

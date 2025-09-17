@@ -22,6 +22,7 @@ export class Navbar implements OnInit{
   protected selectedTheme = signal<string>(localStorage.getItem('theme') || 'dark');
   protected themes = themes;
   protected busyService = inject(BusyService);
+  protected loading = signal(false);
 
   ngOnInit(): void {
     document.documentElement.setAttribute('data-theme', this.selectedTheme());
@@ -35,7 +36,13 @@ export class Navbar implements OnInit{
     if (elem) elem.blur();
   }
 
+  handleSelectUserItem() {
+    const elem = document.activeElement as HTMLDivElement;
+    if (elem) elem.blur();
+  }
+
   login(): void {
+    this.loading.set(true);
     this.accountService.login(this.creds).subscribe({
       next: () => { 
         this.router.navigateByUrl('/members');
@@ -45,7 +52,8 @@ export class Navbar implements OnInit{
       error: (err) => {
         const msg: string = typeof err.error === 'string' ? err.error : 'Login failed, please try again';
         this.toastService.error(msg);
-      }
+      },
+      complete: () => this.loading.set(false)
     });
   }
 

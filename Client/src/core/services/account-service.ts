@@ -6,7 +6,6 @@ import { RegisterCreds } from '../../types/registerCreds';
 import { LoginCreds } from '../../types/loginCreds';
 import { environment } from '../../environments/environment';
 import { LikesService } from './likes-service';
-import { clearHttpCache } from '../interceptors/loading-interceptor';
 import { PresenceService } from './presence-service';
 
 @Injectable({
@@ -44,7 +43,6 @@ export class AccountService {
 
   startTokenRefreshInterval() {
     setInterval(() => {
-      console.log("USAO USAO USAO");
       this.http.post<User>(this.baseUrl + 'account/refresh-token', {}, { withCredentials: true }).subscribe({
         next: user => this.setCurrentUser(user),
         error: () => this.logout()
@@ -53,11 +51,14 @@ export class AccountService {
   }
 
   logout() {
-    localStorage.removeItem('filters');
-    this.currentUser.set(null);
-    this.likesService.clearLikeIds();
-    clearHttpCache();
-    this.presenceService.stopHubConnection();
+    this.http.post(this.baseUrl + 'account/logout', {}, { withCredentials: true }).subscribe({
+      next: () => {
+        localStorage.removeItem('filters');
+        this.currentUser.set(null);
+        this.likesService.clearLikeIds();
+        this.presenceService.stopHubConnection();
+      }
+    });
   }
 
   setCurrentUser(user: User) {

@@ -5,10 +5,6 @@ import { delay, finalize, of, tap } from 'rxjs';
 
 const cache = new Map<string, HttpEvent<unknown>>();
 
-export function clearHttpCache() {
-  cache.clear();
-}
-
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const busyService = inject(BusyService);
 
@@ -40,6 +36,10 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
     if (cachedResponse) return of(cachedResponse);
   }
   
+  if (req.method.includes('POST') && req.url.includes('logout')) {
+    cache.clear();
+  }
+
   busyService.busy();
 
   return next(req).pipe(
