@@ -1,29 +1,27 @@
-﻿    using API.Model;
+﻿using API.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
     [Authorize]
-    public class AdminController(UserManager<User> _userManager) : BaseApiController
+    public class AdminController(IUnitOfWork _uow) : BaseApiController
     {
         [Authorize(Policy = "RequireAdminRole")]
         [HttpGet("users-with-roles")]
         public async Task<ActionResult> GetUsersWithRoles()
         {
-            var users = await _userManager.Users.OrderBy(x=> x.Email).ToListAsync();
+            var users = await _uow.AccountRepository.GetUsersAsync();
             var userList = new List<object>();
-            foreach (var user in users)
+            foreach (var user in users!)
             {
-                var rls = await _userManager.GetRolesAsync(user);
+                var rls = await _uow.AccountRepository.GetRolesForAUserAsync(user);
                 userList.Add(new
                 {
                     user.Id,
                     user.UserName,
                     user.Email,
-                    roles = rls.ToList()
+                    roles = rls!.ToList()
                 });
             }
             return Ok(userList); // example for an anonymous object
@@ -37,17 +35,17 @@ namespace API.Controllers
         {
             if (string.IsNullOrEmpty(roles)) return BadRequest("You must select atleast one role.");
             var selectedRoles = roles.Split(",").ToArray();
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _uow.AccountRepository.GetUserByIdAsync(userId);
             if (user is null) return BadRequest("Could not retrieve the user.");
-            var userRoles = await _userManager.GetRolesAsync(user);
+            var userRoles = await _uow.AccountRepository.GetRolesForAUserAsync(user);
 
-            var result = await _userManager.AddToRolesAsync(user, selectedRoles.Except(userRoles));
+            var result = await _uow.AccountRepository.AddToRolesAsync(user, selectedRoles.Except(userRoles!));
             if (!result.Succeeded) return BadRequest("Failed to add to roles");
 
-            result = await _userManager.RemoveFromRolesAsync(user, userRoles.Except(selectedRoles));    
+            result = await _uow.AccountRepository.RemoveFromRolesAsync(user, userRoles!.Except(selectedRoles));
             if (!result.Succeeded) return BadRequest("Failed to remove from roles");
 
-            return Ok(await _userManager.GetRolesAsync(user));
+            return Ok(await _uow.AccountRepository.GetRolesForAUserAsync(user));
         }
 
         [Authorize(Policy = "ModeratePhotoRole")]

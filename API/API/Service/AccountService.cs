@@ -2,10 +2,6 @@
 using API.Interface;
 using API.Model;
 using API.Repository.IRepository;
-using API.Util;
-using Azure;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -41,11 +37,12 @@ namespace API.Service
                 }
             };
 
-        public async Task<CookieOptions> SetRefreshTokenCookie(User user, string refreshToken, IAccountRepository repo)
+        public async Task<CookieOptions> SetRefreshTokenCookie(User user, string refreshToken, IUnitOfWork uow)
         {
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpire = DateTime.UtcNow.AddDays(5);
-            await repo.UpdateAsync(user);
+            await uow.AccountRepository.UpdateAsync(user);
+            await uow.Complete();
 
             return new CookieOptions()
             {

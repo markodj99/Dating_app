@@ -8,6 +8,6 @@ namespace API.Interface
         string GetUserId(in HubCallerContext context);
         string GetGroupName(string caller, string other);
         string GetOtherUserId(in HubCallerContext context);
-        Task<bool> AddToGroup(string groupName, IMessageRepository msgRepo, string connectionId, string userId);
+        Task<bool> AddToGroup(string groupName, IUnitOfWork uow, string connectionId, string userId);
     }
 }

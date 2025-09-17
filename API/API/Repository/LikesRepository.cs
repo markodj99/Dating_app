@@ -49,7 +49,5 @@ namespace API.Repository
         public void DeleteLike(MemberLike like) => _context.Likes.Remove(like);
 
         public void AddLike(MemberLike like) => _context.Likes.Add(like);
-
-        public async Task<bool> SaveAllChangesAsync() => await _context.SaveChangesAsync() > 0;
     }
 }

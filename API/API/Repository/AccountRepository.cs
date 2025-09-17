@@ -29,5 +29,13 @@ namespace API.Repository
         public async Task Logout(string userId) =>
             await _userManager.Users.Where(x => x.Id == userId)
             .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.RefreshToken, _ => null).SetProperty(x => x.RefreshTokenExpire, _ => null));
+
+        public async Task<List<User>?> GetUsersAsync() => await _userManager.Users.OrderBy(x => x.Email).ToListAsync();
+
+        public async Task<IList<string>?> GetRolesForAUserAsync(User user) => await _userManager.GetRolesAsync(user);
+
+        public async Task<IdentityResult> AddToRolesAsync(User user, IEnumerable<string> roles) => await _userManager.AddToRolesAsync(user, roles);
+        public async Task<IdentityResult> RemoveFromRolesAsync(User user, IEnumerable<string> roles) 
+            => await _userManager.RemoveFromRolesAsync(user, roles);
     }
 }

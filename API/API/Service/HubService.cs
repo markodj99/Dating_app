@@ -22,19 +22,19 @@ namespace API.Service
             return httpContext?.Request?.Query["userId"].ToString() ?? throw new HubException("Other user not found.");
         }
 
-        public async Task<bool> AddToGroup(string groupName, IMessageRepository msgRepo, string connectionId, string userId)
+        public async Task<bool> AddToGroup(string groupName, IUnitOfWork uow, string connectionId, string userId)
         {
-            var group = await msgRepo.GetMessageGroupAsync(groupName);
+            var group = await uow.MessageRepository.GetMessageGroupAsync(groupName);
             var connection = new Connection(connectionId, userId);
 
             if (group is null)
             {
                 group = new Group(groupName);
-                msgRepo.AddGroup(group);
+                uow.MessageRepository.AddGroup(group);
             }
 
             group.Connections.Add(connection);
-            return await msgRepo.SaveAllChangesAsync();
+            return await uow.Complete();
         }
     }
 }

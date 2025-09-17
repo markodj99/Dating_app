@@ -10,8 +10,6 @@ namespace API.Repository
     {
         public void Update(Member member) => _context.Entry(member).State = EntityState.Modified;
 
-        public async Task<bool> SaveAllAsync() => await _context.SaveChangesAsync() > 0;
-
         public async Task<PaginatedResult<Member>> GetMembersAsync(MemberParams memberParams)
         {
             var query = _context.Members.AsQueryable();

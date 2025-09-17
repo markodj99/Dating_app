@@ -15,5 +15,9 @@ namespace API.Repository.IRepository
         Task<bool> UserNameExistsAsync(string username);
         Task<bool> EmailExistsAsync(string email);
         Task Logout(string userId);
+        Task<List<User>?> GetUsersAsync();
+        Task<IList<string>?> GetRolesForAUserAsync(User user);
+        Task<IdentityResult> AddToRolesAsync(User user, IEnumerable<string> roles);
+        Task<IdentityResult> RemoveFromRolesAsync(User user, IEnumerable<string> roles);
     }
 }

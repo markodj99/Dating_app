@@ -39,8 +39,6 @@ namespace API.Repository
                 .ToListAsync();
         }
 
-        public async Task<bool> SaveAllChangesAsync() => await _context.SaveChangesAsync() > 0;
-
         public void AddGroup(Group group) => _context.Groups.Add(group);
 
         public async Task RemoveConnectionAsync(string connectionId)

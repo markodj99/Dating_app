@@ -10,6 +10,5 @@ namespace API.Repository.IRepository
         Task<IReadOnlyList<string>> GetCurrentMemberLikeIdAsync(string memberId);
         void DeleteLike(MemberLike like);
         void AddLike(MemberLike like);
-        Task<bool> SaveAllChangesAsync();
     }
 }

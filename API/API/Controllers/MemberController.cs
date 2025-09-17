@@ -10,27 +10,27 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [Authorize]
-    public class MemberController(IMemberRepository _repo, IPhotoService _photoService) : BaseApiController
+    public class MemberController(IUnitOfWork _uow, IPhotoService _photoService) : BaseApiController
     {
         [HttpGet("all")]
         [ProducesResponseType(typeof(PaginatedResult<MemberDto>), StatusCodes.Status200OK)]
         public async Task<ActionResult<PaginatedResult<MemberDto>>> GetAllMembers([FromQuery] MemberParams memberParams)
         {
             memberParams.CurrentMemberId = User.GetMemberId();
-            return Ok(ToDto.PRMemberToPRMemberDto(await _repo.GetMembersAsync(memberParams)));
+            return Ok(ToDto.PRMemberToPRMemberDto(await _uow.MemberRepository.GetMembersAsync(memberParams)));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<MemberDto>> GetUser(string id)
         {
-            var member = await _repo.GetMemberByIdAsync(id);
+            var member = await _uow.MemberRepository.GetMemberByIdAsync(id);
             if (member is null) return NotFound();
             return Ok(ToDto.MemberToMemberDto(member));
         }
 
         [HttpGet("{id}/photos")]
         public async Task<ActionResult<IReadOnlyList<PhotoDto>>> GetMemberPhotos(string id)
-            => Ok(ToDto.PhotosToPhotoDtos(await _repo.GetPhotosForMemberAsync(id)));
+            => Ok(ToDto.PhotosToPhotoDtos(await _uow.MemberRepository.GetPhotosForMemberAsync(id)));
 
         [HttpPut("update")]
         public async Task<ActionResult> UpdateMember(MemberUpdateDto memberUpdate)
@@ -41,9 +41,9 @@ namespace API.Controllers
             if (member is null) return BadRequest("Something went wrong. Please try again later.");
 
             ToDto.MemberUpdateDtoToMember(member, memberUpdate);
-            _repo.Update(member); // kinda optional
+            _uow.MemberRepository.Update(member); // kinda optional
 
-            if (await _repo.SaveAllAsync()) return NoContent();
+            if (await _uow.Complete()) return NoContent();
             return BadRequest("Failed to update a member.");
         }
 
@@ -68,7 +68,7 @@ namespace API.Controllers
             }
 
             member.Photos.Add(photo);
-            if (await _repo.SaveAllAsync()) return Ok(ToDto.PhotoToPhotoDto(photo));
+            if (await _uow.Complete()) return Ok(ToDto.PhotoToPhotoDto(photo));
             return BadRequest("Could not add a photo. please try again later.");
         }
 
@@ -84,7 +84,7 @@ namespace API.Controllers
             member.ImageUrl = photo.Url;
             member.User.ImageUrl = photo.Url;
 
-            if (await _repo.SaveAllAsync()) return NoContent();
+            if (await _uow.Complete()) return NoContent();
             return BadRequest("Something went wrong");
         }
 
@@ -104,14 +104,14 @@ namespace API.Controllers
             }
 
             member.Photos.Remove(photo);
-            if (await _repo.SaveAllAsync()) return Ok();
+            if (await _uow.Complete()) return Ok();
             return BadRequest("Could not delete a photo. please try again later.");
         }
 
         private async Task<Member?> GetMember()
         {
             string id = User.GetMemberId();
-            return await _repo.GetMemberUpdateAsync(id);
+            return await _uow.MemberRepository.GetMemberUpdateAsync(id);
         }
     }
 }

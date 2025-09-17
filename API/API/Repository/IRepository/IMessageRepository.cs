@@ -10,7 +10,6 @@ namespace API.Repository.IRepository
         Task<Message?> GetMessageAsync(string messageId);
         Task<PaginatedResult<Message>> GetMessagesForMemberAsync(MessageParams messageParams);
         Task<IReadOnlyList<Message>> GetMessageThreadAsync(string currentMemberId, string recipientId);
-        Task<bool> SaveAllChangesAsync();
         void AddGroup(Group group);
         Task RemoveConnectionAsync(string connectionId);
         Task<Connection?> GetConnectionAsync(string connectionId);

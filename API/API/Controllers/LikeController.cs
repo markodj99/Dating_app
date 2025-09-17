@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [Authorize]
-    public class LikeController(ILikesRepository _repo) : BaseApiController
+    public class LikeController(IUnitOfWork _uow) : BaseApiController
     {
         [HttpPost("{targetMemberId}")]
         public async Task<ActionResult> ToggleLike(string targetMemberId)
@@ -17,7 +17,7 @@ namespace API.Controllers
             var sourceMemberId = User.GetMemberId();
             if (sourceMemberId.Equals(targetMemberId)) return BadRequest("You can not like yourself.");
 
-            var existingLike = await _repo.GetMemberLikeAsync(sourceMemberId, targetMemberId);
+            var existingLike = await _uow.LikesRepository.GetMemberLikeAsync(sourceMemberId, targetMemberId);
             if (existingLike is null)
             {
                 var like = new MemberLike
@@ -25,24 +25,24 @@ namespace API.Controllers
                     SourceMemberId = sourceMemberId,
                     TargetMemberId = targetMemberId
                 };
-                _repo.AddLike(like);
+                _uow.LikesRepository.AddLike(like);
             }
-            else _repo.DeleteLike(existingLike);
+            else _uow.LikesRepository.DeleteLike(existingLike);
 
-            if (await _repo.SaveAllChangesAsync()) return Ok();
+            if (await _uow.Complete()) return Ok();
             return BadRequest("Failed to update a like.");
         }
 
         [HttpGet("list")]
         public async Task<ActionResult<IReadOnlyList<string>>> GetCurrentMemberLikeIds()
-            => Ok(await _repo.GetCurrentMemberLikeIdAsync(User.GetMemberId()));
+            => Ok(await _uow.LikesRepository.GetCurrentMemberLikeIdAsync(User.GetMemberId()));
 
         [HttpGet]
         [ProducesResponseType(typeof(PaginatedResult<MemberDto>), StatusCodes.Status200OK)]
         public async Task<ActionResult<PaginatedResult<MemberDto>>> GetMemberLikes([FromQuery] LikesParams likesParams)
         {
             likesParams.MemberId = User.GetMemberId();
-            return Ok(ToDto.PRMemberToPRMemberDto(await _repo.GetMemberLikesAsync(likesParams)));
+            return Ok(ToDto.PRMemberToPRMemberDto(await _uow.LikesRepository.GetMemberLikesAsync(likesParams)));
         }
     }
 }
