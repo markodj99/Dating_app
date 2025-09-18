@@ -12,7 +12,7 @@
       />
       <app-delete-button
           [disabled]="photo.url === memberService.member()?.imageUrl"
-          (clickEvent)="deletePhoto(photo.id)"
+          (clickEvent)="confirmDelete(photo.id)"
           class="absolute top-1 left-1"
       />
     }

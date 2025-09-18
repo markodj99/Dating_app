@@ -7,6 +7,7 @@ import { ToastService } from '../../../core/services/toast-service';
 import { AccountService } from '../../../core/services/account-service';
 import { StarButton } from "../../../shared/star-button/star-button";
 import { DeleteButton } from "../../../shared/delete-button/delete-button";
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog-service';
 
 @Component({
   selector: 'app-member-photos',
@@ -21,6 +22,7 @@ export class MemberPhotos implements OnInit {
   protected photos = signal<Photo[]>([]);
   protected loading = signal(false);
   private toastService = inject(ToastService);
+  private confirmDialog = inject(ConfirmDialogService);
 
   ngOnInit(): void {
     const memberId = this.route.parent?.snapshot.paramMap.get('id');
@@ -57,6 +59,11 @@ export class MemberPhotos implements OnInit {
       },
       error: () => this.toastService.error('Failed to set main photo')
     });
+  }
+
+  async confirmDelete(photoId: number) {
+    const ok = await this.confirmDialog.confirm('Are you sure you want to delete this picture?');
+    if (ok) this.deletePhoto(photoId);
   }
 
   deletePhoto(photoId: number) {

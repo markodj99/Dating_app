@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Navbar } from "../layout/navbar/navbar";
 import { Router, RouterOutlet } from '@angular/router';
+import { ConfirmDialog } from "../shared/confirm-dialog/confirm-dialog";
 
 @Component({
   selector: 'app-root',
-  imports: [Navbar, RouterOutlet],
+  imports: [Navbar, RouterOutlet, ConfirmDialog],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
