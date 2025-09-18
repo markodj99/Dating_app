@@ -11,5 +11,7 @@ namespace API.DTO
         public string? PublicId { get; set; }
         [Required]
         public string MemberId { get; set; } = null!;
+        [Required]
+        public bool IsApproved { get; set; }
     }
 }

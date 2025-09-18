@@ -12,11 +12,13 @@ namespace API.Repository
         private IMemberRepository? _memberRepository;
         private IMessageRepository? _messageRepository;
         private ILikesRepository? _likesRepository;
+        private IPhotoRepository? _photoRepository;
 
         public IAccountRepository AccountRepository => _accountRepository ??= new AccountRepository(_userManager);
         public IMemberRepository MemberRepository => _memberRepository ??= new MemberRepository(_context);
         public IMessageRepository MessageRepository => _messageRepository ??= new MessageRepository(_context);
         public ILikesRepository LikesRepository => _likesRepository ??= new LikesRepository(_context);
+        public IPhotoRepository PhotoRepository => _photoRepository ??= new PhotoRepository(_context);
 
         public async Task<bool> Complete()
         {

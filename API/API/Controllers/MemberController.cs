@@ -30,7 +30,10 @@ namespace API.Controllers
 
         [HttpGet("{id}/photos")]
         public async Task<ActionResult<IReadOnlyList<PhotoDto>>> GetMemberPhotos(string id)
-            => Ok(ToDto.PhotosToPhotoDtos(await _uow.MemberRepository.GetPhotosForMemberAsync(id)));
+        {
+            bool isCurrentUser = User.GetMemberId() == id;
+            return Ok(ToDto.PhotosToPhotoDtos(await _uow.MemberRepository.GetPhotosForMemberAsync(id, isCurrentUser)));
+        }
 
         [HttpPut("update")]
         public async Task<ActionResult> UpdateMember(MemberUpdateDto memberUpdate)
@@ -61,12 +64,6 @@ namespace API.Controllers
 
             var photo = _photoService.CreateNewPhoto(result, member.Id);
 
-            if (member.ImageUrl is null)
-            {
-                member.ImageUrl = photo.Url;
-                member.User.ImageUrl = photo.Url;
-            }
-
             member.Photos.Add(photo);
             if (await _uow.Complete()) return Ok(ToDto.PhotoToPhotoDto(photo));
             return BadRequest("Could not add a photo. please try again later.");
@@ -80,6 +77,7 @@ namespace API.Controllers
 
             var photo = member.Photos.SingleOrDefault(x => x.Id == photoId);
             if (member.ImageUrl == photo?.Url || photo is null) return BadRequest("Can not set this as a main image.");
+            if (!photo.IsApproved) return BadRequest("Can not set unapproved photo as a main photo.");
 
             member.ImageUrl = photo.Url;
             member.User.ImageUrl = photo.Url;

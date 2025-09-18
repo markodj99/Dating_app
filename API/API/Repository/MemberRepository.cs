@@ -35,10 +35,14 @@ namespace API.Repository
             => await _context.Members
                 .Include(x => x.User)
                 .Include(x => x.Photos)
+                .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-        public async Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId)
-            => await _context.Members.Where(x => x.Id.Equals(memberId))
-                .SelectMany(x => x.Photos).ToListAsync();
+        public async Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId, bool isCurrentUser)
+        {
+            var query = _context.Members.Where(x => x.Id.Equals(memberId)).SelectMany(x => x.Photos);
+            if (isCurrentUser) query = query.IgnoreQueryFilters();
+            return await query.ToListAsync();
+        }
     }
 }

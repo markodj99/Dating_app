@@ -35,6 +35,7 @@ namespace API.Util
                 Url = photo.Url,
                 PublicId = photo.PublicId,
                 MemberId = photo.MemberId,
+                IsApproved = photo.IsApproved,
             };
 
         public static IReadOnlyList<PhotoDto> PhotosToPhotoDtos(IReadOnlyList<Photo> photos)
@@ -98,5 +99,21 @@ namespace API.Util
                 MetaData = messages.MetaData,
                 Items = (List<MessageDto>)MessagesToMessageDtos(messages.Items)
             };
+
+        public static PhotoForApprovalDto PhotoToPhotoForApprovalDto(Photo photo)
+            => new()
+            {
+                Id = photo.Id,
+                Url = photo.Url,
+                MemberId = photo.MemberId,
+                IsApproved = photo.IsApproved
+            };
+
+        public static IReadOnlyList<PhotoForApprovalDto> PhotosToPhotoForApprovalDtos(IReadOnlyList<Photo> photos)
+        {
+            var photoList = new List<PhotoForApprovalDto>(photos.Count);
+            foreach (var photo in photos) photoList.Add(PhotoToPhotoForApprovalDto(photo));
+            return photoList;
+        }
     }
 }

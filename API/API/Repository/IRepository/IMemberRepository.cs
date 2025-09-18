@@ -9,6 +9,6 @@ namespace API.Repository.IRepository
         Task<PaginatedResult<Member>> GetMembersAsync(MemberParams memberParams);
         Task<Member?> GetMemberByIdAsync(string id);
         Task<Member?> GetMemberUpdateAsync(string id);
-        Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId);
+        Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId, bool isCurrentUser);
     }
 }
