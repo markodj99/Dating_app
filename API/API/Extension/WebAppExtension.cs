@@ -22,9 +22,14 @@ namespace API.Extension
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.MapControllers();
             app.MapHub<PresenceHub>("hub/presence");
             app.MapHub<MessageHub>("hub/messages");
+
+            app.MapFallbackToController("Index", "Fallback");
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class FaultyController : BaseApiController
     {
         [HttpGet("auth")]
