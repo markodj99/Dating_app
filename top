@@ -1,0 +1,41 @@
+[33mcommit bc073f30b6581a2316100f659176221a8c19cd70[m
+Author: markodj99 <80117888+markodj99@users.noreply.github.com>
+Date:   Fri Sep 19 14:03:17 2025 +0200
+
+    sfasdj
+
+[33mcommit 2019639aa9145f7ad51eb452fa4b567e4d151ae7[m
+Author: markodj99 <80117888+markodj99@users.noreply.github.com>
+Date:   Fri Sep 19 13:52:38 2025 +0200
+
+    Add safe dev settings and ignore file
+
+[33mcommit 34a710a8a82e0cb87dbef659758a1a4bb4d82f11[m
+Author: markodj99 <80117888+markodj99@users.noreply.github.com>
+Date:   Thu Sep 18 21:37:08 2025 +0200
+
+    config
+
+[33mcommit 75a6d10fce5ba5b0fa67e71bf47e17fb34a659d8[m
+Author: markodj99 <80117888+markodj99@users.noreply.github.com>
+Date:   Wed Sep 3 13:25:31 2025 +0200
+
+    Jwt auth added
+
+[33mcommit 86401c67a0b29ca015130c13d2a79be059baf038[m
+Author: markodj99 <80117888+markodj99@users.noreply.github.com>
+Date:   Tue Sep 2 16:54:44 2025 +0200
+
+    ef added
+
+[33mcommit 641e053d49935f9e87291fe95a710d19e9d903d7[m
+Author: markodj99 <80117888+markodj99@users.noreply.github.com>
+Date:   Tue Sep 2 16:21:15 2025 +0200
+
+    removed default files
+
+[33mcommit 9f92f03dfda76a14d20d8ac04b6df49dccef25dc[m
+Author: markodj99 <80117888+markodj99@users.noreply.github.com>
+Date:   Tue Sep 2 15:54:23 2025 +0200
+
+    API created

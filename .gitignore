@@ -388,3 +388,4 @@ project.assets.json
 *.cache
 *.log
 /API/API/appsettings.json
+/API/API/appsettings.Development.json

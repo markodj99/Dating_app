@@ -486,3 +486,4 @@ $RECYCLE.BIN/
 
 ./API/obj
 ./API/appsettings.json
+./API/appsettings.Development.json
