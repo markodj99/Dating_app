@@ -32,7 +32,7 @@ namespace API.Service
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(7),
+                Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = creds
             };
 
