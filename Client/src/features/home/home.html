@@ -13,7 +13,9 @@
         />
       </svg>
       <h1 class="text-5xl font-bold">Find your match</h1>
-      <p class="py-6">Come on in... All you need to do is sign up</p>
+      @if (!accountService.currentUser()) {
+        <p class="py-6">Come on in... All you need to do is sign up</p>
+      }
       <div class="flex items-center gap-3">
         @if (!accountService.currentUser()) {
           <button class="btn btn-primary btn-lg" (click)="showRegister(true)">Register</button>

@@ -25,6 +25,7 @@
         }
       </ul>
     </div>
+    @if (!isCurrentUser()) {
     <div class="card-actions justify-between gap-2 px-2 mb-3">
       <button routerLink="/members" class="btn btn-info flex-1">Go back</button>
       <button
@@ -36,6 +37,7 @@
         {{ hasLiked() ? 'Remove like' : 'Like user' }}
       </button>
     </div>
+    }
   </div>
   <div class="card bg-base-100 w-3/4 p-6 flex flex-col h-[85vh]">
     <div class="flex justify-between items-center">
