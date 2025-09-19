@@ -47,7 +47,7 @@ export class AccountService {
         next: user => this.setCurrentUser(user),
         error: () => this.logout()
       });
-    }, 6 * 60 * 1000);
+    }, 14 * 60 * 1000);
   }
 
   logout() {
